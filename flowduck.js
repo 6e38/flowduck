@@ -28,7 +28,7 @@ function initAll() {
 function getRemainingTime() {
   var date = new Date();
   var current = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-  var end = Date.UTC(2022, 7, 16, 6);
+  var end = Date.UTC(2022, 7, 15, 6);
   var totalSeconds = Math.floor((end - current) / 1000);
   var seconds = totalSeconds % 60;
   var minutes = Math.floor(totalSeconds % (60 * 60) / 60);
