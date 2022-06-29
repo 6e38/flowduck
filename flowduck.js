@@ -101,6 +101,9 @@ setInterval(() => {
 
   var current = new Date();
   var dt = (current - gbl.lastUpdate) / 1000;
+  if (dt > 10) {
+    dt = 0.01; // Pick up where you left off when javascript goes to sleep
+  }
   drawDucks(ctx, gbl.ducks, dt);
   gbl.lastUpdate = current;
 
