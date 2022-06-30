@@ -2,8 +2,6 @@
 // >o
 //  (>)
 
-const TotalDucks = 20;
-
 var gbl = {};
 
 function resize() {
@@ -28,14 +26,13 @@ function initAll() {
 function getRemainingTime() {
   var date = new Date();
   var current = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
-  var end = Date.UTC(2022, 7, 15, 6);
-  var totalSeconds = Math.floor((end - current) / 1000);
+  var totalSeconds = Math.floor((EndDate - current) / 1000);
   var seconds = totalSeconds % 60;
   var minutes = Math.floor(totalSeconds % (60 * 60) / 60);
   var hours = Math.floor(totalSeconds % (60 * 60 * 24) / (60 * 60));
   var days = Math.floor(totalSeconds / 60 / 60 / 24);
   return {
-    finished: current >= end,
+    finished: current >= EndDate,
     totalSeconds,
     seconds,
     minutes,
@@ -49,11 +46,15 @@ function randomX() {
 }
 
 function randomY() {
-  return Math.floor(Math.random() * gbl.height);
+  return Math.floor(Math.random() * (gbl.height - MaxDuckSize));
 }
 
 function randomRate() {
-  return -(Math.random() * 50 + 50);
+  return -(Math.random() * (MaxDuckRate - MinDuckRate) + MinDuckRate);
+}
+
+function randomDuckSize() {
+  return Math.random() * (MaxDuckSize - MinDuckSize) + MinDuckSize;
 }
 
 function addDuck(ducks) {
@@ -61,33 +62,36 @@ function addDuck(ducks) {
     x: randomX(),
     y: randomY(),
     dx: randomRate(),
+    size: randomDuckSize(),
+    color: ducks.length == TotalDucks - 1 ? SpecialDuckColor : DuckColor,
   });
 }
 
 function updateDuck(duck, dt) {
   duck.x = duck.x + dt * duck.dx;
-  if (duck.x < -100) {
+  if (duck.x < MaxDuckSize * -2) {
     duck.x = gbl.width;
     duck.y = randomY();
     duck.dx = randomRate();
+    duck.size = randomDuckSize();
   }
 }
 
-function drawDuck(ctx, x, y) {
-  var lineheight = 15;
-  ctx.fillText('>o', x, y + lineheight);
-  ctx.fillText(' (>)', x, y + 2 * lineheight);
+function drawDuck(ctx, duck) {
+  var lineheight = Math.floor(duck.size / 2);
+  ctx.fillStyle = duck.color;
+  ctx.font = lineheight + 'px monospace';
+  ctx.fillText('>o', duck.x, duck.y + lineheight);
+  ctx.fillText(' (>)', duck.x, duck.y + 2 * lineheight);
 }
 
 function drawDucks(ctx, ducks, dt) {
-  ctx.fillStyle = '#888';
-  ctx.font = '15px monospace';
   if (ducks.length < TotalDucks) {
     addDuck(ducks);
   }
   ducks.forEach((duck) => {
     updateDuck(duck, dt);
-    drawDuck(ctx, duck.x, duck.y);
+    drawDuck(ctx, duck);
   });
 }
 
@@ -96,7 +100,7 @@ setInterval(() => {
   var width = gbl.width;
   var height = gbl.height;
 
-  ctx.fillStyle = '#333';
+  ctx.fillStyle = BackgroundColor;
   ctx.fillRect(0, 0, width, height);
 
   var current = new Date();
@@ -108,7 +112,7 @@ setInterval(() => {
   gbl.lastUpdate = current;
 
   var remaining = getRemainingTime();
-  var secStr = 'flowduck eol ' + remaining.totalSeconds + 's';
+  var secStr = EventName + ' ' + remaining.totalSeconds + 's';
   var hoursPad = remaining.hours < 10 ? '0' : '';
   var minutesPad = remaining.minutes < 10 ? '0' : '';
   var secondsPad = remaining.seconds < 10 ? '0' : '';
@@ -119,20 +123,18 @@ setInterval(() => {
   var humanStr = remaining.days + ' day' + daysS + ' ' + hoursPad + remaining.hours + ' hour' + hoursS + ' ' + minutesPad + remaining.minutes + ' minute' + minutesS + ' ' + secondsPad + remaining.seconds + ' second' + secondsS;
 
   if (remaining.finished) {
-    secStr = 'flowduck eol has arrived';
-    humanStr = 'happy day';
+    secStr = EventName + ' has arrived';
+    humanStr = FinalMessage;
   }
 
-  var padding = 35;
-
-  ctx.fillStyle = '#aaa';
-  ctx.font = '50px monospace';
+  ctx.fillStyle = TextColor;
+  ctx.font = TitleSize + 'px monospace';
   var secStrDim = ctx.measureText(secStr);
-  ctx.fillText(secStr, width - padding - secStrDim.width, 150);
+  ctx.fillText(secStr, width - WordPadding - secStrDim.width, TitleBaseline);
 
-  ctx.font = '15px monospace';
+  ctx.font = SubtitleSize + 'px monospace';
   var humanStrDim = ctx.measureText(humanStr);
-  ctx.fillText(humanStr, width - padding - humanStrDim.width, 170);
+  ctx.fillText(humanStr, width - WordPadding - humanStrDim.width, SubtitleBaseline);
 
 }, 1000 / 60);
 
