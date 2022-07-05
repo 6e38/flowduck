@@ -2,6 +2,8 @@
 // >o
 //  (>)
 
+document.title = EventName;
+
 var gbl = {};
 
 function resize() {
