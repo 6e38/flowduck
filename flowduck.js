@@ -61,15 +61,18 @@ function addDuck(ducks) {
   ducks.push({
     x: randomX(),
     y: randomY(),
+    bob: 0,
     dx: randomRate(),
     size: randomDuckSize(),
+    width: 0,
     color: ducks.length == TotalDucks - 1 ? SpecialDuckColor : DuckColor,
   });
 }
 
 function updateDuck(duck, dt) {
   duck.x = duck.x + dt * duck.dx;
-  if (duck.x < MaxDuckSize * -2) {
+  duck.bob = DuckBob * Math.sin(duck.x / 50);
+  if (duck.x < -duck.width * 1.1) {
     duck.x = gbl.width;
     duck.y = randomY();
     duck.dx = randomRate();
@@ -77,12 +80,27 @@ function updateDuck(duck, dt) {
   }
 }
 
+function measureDuck(ctx, duck) {
+  var width = 0;
+  Duck.split("\n").forEach((line, i) => {
+    var dim = ctx.measureText(line);
+    if (dim.width > width) {
+      width = dim.width;
+    }
+  });
+  duck.width = width;
+}
+
 function drawDuck(ctx, duck) {
   var lineheight = Math.floor(duck.size / 2);
   ctx.fillStyle = duck.color;
   ctx.font = lineheight + 'px monospace';
-  ctx.fillText('>o', duck.x, duck.y + lineheight);
-  ctx.fillText(' (>)', duck.x, duck.y + 2 * lineheight);
+  Duck.split("\n").forEach((line, i) => {
+    ctx.fillText(line, duck.x, duck.y + lineheight * (i + 1) + duck.bob);
+  });
+  if (duck.width == 0) {
+    measureDuck(ctx, duck);
+  }
 }
 
 function drawDucks(ctx, ducks, dt) {

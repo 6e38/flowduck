@@ -16,8 +16,10 @@ const MinDuckSize = 30;
 const MaxDuckSize = 30;
 const MinDuckRate = 50;
 const MaxDuckRate = 100;
+const DuckBob = 20;
 const DuckColor = '#888';
 const SpecialDuckColor = '#c66';
+const Duck = ">o\n (>)";
 
 const EndDate = Date.UTC(2022, 7, 15, 6);
 
