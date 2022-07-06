@@ -58,6 +58,7 @@ function randomDuckSize() {
 }
 
 function addDuck(ducks) {
+  var isSpecial = ducks.length == TotalDucks - 1;
   ducks.push({
     x: randomX(),
     y: randomY(),
@@ -65,7 +66,9 @@ function addDuck(ducks) {
     dx: randomRate(),
     size: randomDuckSize(),
     width: 0,
-    color: ducks.length == TotalDucks - 1 ? SpecialDuckColor : DuckColor,
+    color: isSpecial ? SpecialDuckColor : DuckColor,
+    special: isSpecial ? drawWednesday : null,
+    specialMeasure: isSpecial ? measureWednesday : null,
   });
 }
 
@@ -82,6 +85,11 @@ function updateDuck(duck, dt) {
 
 function measureDuck(ctx, duck) {
   var width = 0;
+  if (duck.specialMeasure != null) {
+    width = duck.specialMeasure(ctx, duck);
+  }
+  var lineheight = Math.floor(duck.size / 2);
+  ctx.font = lineheight + 'px monospace';
   Duck.split("\n").forEach((line, i) => {
     var dim = ctx.measureText(line);
     if (dim.width > width) {
@@ -93,13 +101,16 @@ function measureDuck(ctx, duck) {
 
 function drawDuck(ctx, duck) {
   var lineheight = Math.floor(duck.size / 2);
-  ctx.fillStyle = duck.color;
   ctx.font = lineheight + 'px monospace';
+  ctx.fillStyle = duck.color;
   Duck.split("\n").forEach((line, i) => {
     ctx.fillText(line, duck.x, duck.y + lineheight * (i + 1) + duck.bob);
   });
   if (duck.width == 0) {
     measureDuck(ctx, duck);
+  }
+  if (duck.special != null) {
+    duck.special(ctx, duck);
   }
 }
 
