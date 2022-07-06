@@ -69,8 +69,7 @@ function addDuck(ducks) {
     size: randomDuckSize(),
     width: 0,
     color: isSpecial ? SpecialDuckColor : DuckColor,
-    special: isSpecial ? drawWednesday : null,
-    specialMeasure: isSpecial ? measureWednesday : null,
+    special: isSpecial ? Special : null,
   });
 }
 
@@ -87,8 +86,8 @@ function updateDuck(duck, dt) {
 
 function measureDuck(ctx, duck) {
   var width = 0;
-  if (duck.specialMeasure != null) {
-    width = duck.specialMeasure(ctx, duck);
+  if (duck.special != null) {
+    width = duck.special.measure(ctx, duck);
   }
   var lineheight = Math.floor(duck.size / 2);
   ctx.font = lineheight + 'px monospace';
@@ -112,7 +111,7 @@ function drawDuck(ctx, duck) {
     measureDuck(ctx, duck);
   }
   if (duck.special != null) {
-    duck.special(ctx, duck);
+    duck.special.draw(ctx, duck);
   }
 }
 

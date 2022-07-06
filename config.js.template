@@ -19,8 +19,13 @@ const MaxDuckRate = 100;
 const DuckBob = 20;
 const DuckColor = '#888';
 const SpecialDuckColor = '#c66';
+const SpecialMessage = "It's Wednesday my dudes";
+const SpecialMessageSize = 15;
 const Duck = ">o\n (>)";
 
 const EndDate = Date.UTC(2022, 7, 15, 6);
 
 const WordPadding = 35;
+
+const Special = wednesday.init(SpecialMessage, SpecialMessageSize);
+// const Special = custom.init(SpecialMessage, SpecialMessageSize);
