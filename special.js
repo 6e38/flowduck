@@ -1,15 +1,13 @@
 // /\//\+/-//\/\/
 
-const Message = 'It is Wednesday my dudes';
-const MessageSize = 15;
 const MessageOffset = 50;
 
 function drawWednesday(ctx, duck) {
   var current = new Date();
   if (current.getDay() == 3) {
     ctx.fillStyle = duck.color;
-    ctx.font = MessageSize + 'px monospace';
-    ctx.fillText(Message, duck.x + MessageOffset, duck.y + duck.bob - MessageOffset);
+    ctx.font = SpecialMessageSize + 'px monospace';
+    ctx.fillText(SpecialMessage, duck.x + MessageOffset, duck.y + duck.bob - MessageOffset);
 
     ctx.strokeStyle = duck.color;
     ctx.lineWidth = 2;
@@ -21,6 +19,6 @@ function drawWednesday(ctx, duck) {
 }
 
 function measureWednesday(ctx, duck) {
-  ctx.font = MessageSize + 'px monospace';
-  return ctx.measureText(Message).width + MessageOffset;
+  ctx.font = SpecialMessageSize + 'px monospace';
+  return ctx.measureText(SpecialMessage).width + MessageOffset;
 }
