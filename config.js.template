@@ -21,11 +21,16 @@ const DuckColor = '#888';
 const SpecialDuckColor = '#c66';
 const SpecialMessage = "It's Wednesday my dudes";
 const SpecialMessageSize = 15;
-const Duck = ">o\n (>)";
+const PartyMessage = "Party Time!";
+const PartyMessageSize = 15;
+const DuckArray = [">o\n (>)"]; //">(.)__\n (___/", "<(.)__\n (___/", "=(.)__\n (___/", 
+const NormalDuck = ">o\n (>)";
+const Duck = wednesdayDuck.init(DuckArray,NormalDuck);
 
 const EndDate = Date.UTC(2022, 7, 15, 6);
 
 const WordPadding = 35;
 
 const Special = wednesday.init(SpecialMessage, SpecialMessageSize);
+const Party = party.init(PartyMessage, PartyMessageSize);
 // const Special = custom.init(SpecialMessage, SpecialMessageSize);

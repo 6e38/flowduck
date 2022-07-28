@@ -29,3 +29,10 @@ var wednesday = {
     return ctx.measureText(this.Message).width + this.MessageOffset;
   },
 };
+
+var wednesdayDuck = {
+  init: function(duckArray, normalDuck) {
+    var current = new Date();
+    return current.getDay() == 3 ? duckArray[Math.floor(Math.random()*duckArray.length)] : normalDuck;
+  }
+};
