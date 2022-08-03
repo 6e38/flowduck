@@ -59,8 +59,13 @@ function randomDuckSize() {
   return Math.random() * (MaxDuckSize - MinDuckSize) + MinDuckSize;
 }
 
+function randomColor() {
+  return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
 function addDuck(ducks) {
-  var isSpecial = ducks.length == TotalDucks - 1;
+  var isParty = getRemainingTime().finished;
+  var isSpecial = isParty ? ducks.length > TotalDucks - 6 : ducks.length == TotalDucks - 1;
   ducks.push({
     x: randomX(),
     y: randomY(),
@@ -68,8 +73,8 @@ function addDuck(ducks) {
     dx: randomRate(),
     size: randomDuckSize(),
     width: 0,
-    color: isSpecial ? SpecialDuckColor : DuckColor,
-    special: isSpecial ? Special : null,
+    color: isParty ? randomColor() : isSpecial ? SpecialDuckColor : DuckColor,
+    special: isSpecial ? isParty ? Party : Special : null,
   });
 }
 
